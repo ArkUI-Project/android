@@ -63,7 +63,11 @@ Virtualization Framework and Rosetta enabled, enter the local build shell with:
 ```sh
 ./manifest/development/linux-shell.sh
 source build/envsetup.sh
+breakfast sdk_phone_arm64 userdebug
 ```
+
+`lineage_sdk_phone_arm64` is the upstream generic ARM64 phone emulator product.
+`breakfast` reads the release configuration from `vendor/lineage/vars/`.
 
 The container mounts the same case-sensitive source tree at `/src`, writes build
 outputs into its `out/` directory, and runs as the current user's UID and GID.
