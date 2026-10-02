@@ -16,9 +16,11 @@ Other projects use the remotes and revisions specified by LineageOS. Device adap
 
 ## macOS source workspace
 
-Clone this repository into `manifest/` inside a development workspace. Install `git`, `git-lfs`, and `repo` with Homebrew, then run:
+Clone this repository into `manifest/` inside a development workspace. Install the tools with Homebrew, then run:
 
 ```sh
+brew install git git-lfs repo gnupg gh
+git lfs install --skip-repo
 ./manifest/development/mount-source.sh
 ./manifest/development/sync.sh
 ```
@@ -41,12 +43,7 @@ On Ubuntu 24.04 LTS:
 
 ```sh
 ./manifest/development/bootstrap-linux.sh
-mkdir -p source
-cd source
-repo init -u https://github.com/ArkUI-Project/android.git \
-  -b lineage-23.2 --git-lfs --partial-clone --clone-filter=blob:none \
-  --no-clone-bundle --platform=linux
-repo sync -c -j4 --no-tags
+./manifest/development/sync.sh
 ```
 
 Select a device and follow its [LineageOS build instructions](https://wiki.lineageos.org/devices/) before producing a flashable image. The source tree supplies the build toolchain, including Java. Initialize the build shell with:
