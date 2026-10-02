@@ -7,5 +7,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
     python-is-python3 bc rsync libssl-dev libncurses-dev libtinfo6 lz4 \
     && rm -rf /var/lib/apt/lists/*
+ARG ARKUI_UID=1000
+ARG ARKUI_GID=1000
+RUN groupadd --non-unique --gid "$ARKUI_GID" arkui \
+    && useradd --non-unique --uid "$ARKUI_UID" --gid arkui \
+       --create-home --shell /bin/bash arkui
 WORKDIR /src
 CMD ["bash"]
