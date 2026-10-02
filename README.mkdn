@@ -35,7 +35,47 @@ To unmount after stopping processes that use the source tree:
 hdiutil detach "$PWD/source"
 ```
 
-## Linux build workstation
+## Local development and debugging on Apple Silicon
+
+Use the existing Android Studio SDK and JBR installation. Workspace scripts keep
+the project's AVD in `emulator/avd/`. Prepare and launch an Android 16 AOSP ARM64
+phone emulator:
+
+```sh
+source ./manifest/development/env.sh
+./manifest/development/prepare-emulator.sh
+./manifest/development/emulator.sh
+adb devices
+adb root
+adb logcat
+```
+
+This SDK image provides the initial debugging environment. To debug platform
+changes, build matching ARM64 emulator images and pass their output directory to
+`emulator.sh -sysdir /absolute/path/to/images`. Follow the
+[emulator image options](https://developer.android.com/studio/run/emulator-commandline)
+when supplying individual system, ramdisk, or kernel images. Keep the Android
+release and ABI consistent across the complete image set.
+
+Docker Desktop runs an Ubuntu 24.04 x86_64 container on this Mac. With Apple
+Virtualization Framework and Rosetta enabled, enter the local build shell with:
+
+```sh
+./manifest/development/linux-shell.sh
+source build/envsetup.sh
+```
+
+The container mounts the same case-sensitive source tree at `/src`, writes build
+outputs into its `out/` directory, and runs as the current user's UID and GID.
+Arguments to `linux-shell.sh` run commands directly in that environment.
+
+The 24 GiB Mac and Docker's current 8 GiB allocation suit source work, emulator
+debugging, and toolchain checks. A complete ROM build is substantially more
+demanding, and running x86_64 tools through Rosetta adds overhead. Adjust Docker
+resources before large builds and start with low compilation parallelism; a
+successful complete image build must be verified separately.
+
+## Native Linux build workstation
 
 Use an x86_64 Linux host with a case-sensitive filesystem. Plan for at least 400 GB free disk space and 64 GB RAM, following the [official Android setup requirements](https://source.android.com/docs/setup/start/requirements).
 
