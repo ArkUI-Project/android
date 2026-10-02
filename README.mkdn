@@ -1,36 +1,70 @@
-LineageOS
-===========
+# ArkUI Android
 
-Getting started
----------------
+ArkUI-Project uses LineageOS 23.2 (Android 16) as its upstream. The manifest keeps upstream paths and revisions, with these development repositories hosted in ArkUI-Project:
 
-To get started with Android/LineageOS, you'll need to get familiar with [Source Control Tools](https://source.android.com/setup/develop).
+| Repository | Source path |
+| --- | --- |
+| android | android |
+| android_frameworks_base | frameworks/base (including SystemUI) |
+| android_packages_apps_Settings | packages/apps/Settings |
+| android_packages_apps_Launcher3 | packages/apps/Launcher3 |
+| android_vendor_lineage | vendor/lineage |
+| android_build | build/make |
+| android_build_soong | build/soong |
 
-To initialize your local repository using the LineageOS trees, use a command like this:
+Other projects use the remotes and revisions specified by LineageOS. Device adaptation starts by adding the selected device tree, kernel, and vendor dependencies to a local manifest.
+
+## macOS source workspace
+
+Clone this repository into `manifest/` inside a development workspace. Install `git`, `git-lfs`, and `repo` with Homebrew, then run:
+
+```sh
+./manifest/development/mount-source.sh
+./manifest/development/sync.sh
 ```
-repo init -u https://github.com/LineageOS/android.git -b lineage-23.2 --git-lfs
+
+The source tree lives in `source/`, mounted from `volumes/ArkUI-Source.sparsebundle`. Its APFS filesystem is case sensitive. The image grows as files are downloaded, up to 700 GiB. Run the mount script after a restart, before accessing the source tree.
+
+Synchronization selects Linux host prebuilts, fetches selected revisions with Git LFS, and uses partial Git clones to download historical file contents on demand. The complete selected working tree is checked out. Run the sync script again to resume an interrupted download or fetch updates. Output is appended to `logs/sync.log`; successful synchronization writes `logs/source-lock.xml` with checked-out revisions.
+
+To unmount after stopping processes that use the source tree:
+
+```sh
+hdiutil detach "$PWD/source"
 ```
-Then to sync up:
+
+## Linux build workstation
+
+Use an x86_64 Linux host with a case-sensitive filesystem. Plan for at least 400 GB free disk space and 64 GB RAM, following the [official Android setup requirements](https://source.android.com/docs/setup/start/requirements).
+
+On Ubuntu 24.04 LTS:
+
+```sh
+./manifest/development/bootstrap-linux.sh
+mkdir -p source
+cd source
+repo init -u https://github.com/ArkUI-Project/android.git \
+  -b lineage-23.2 --git-lfs --partial-clone --clone-filter=blob:none \
+  --no-clone-bundle --platform=linux
+repo sync -c -j4 --no-tags
 ```
-repo sync
+
+Select a device and follow its [LineageOS build instructions](https://wiki.lineageos.org/devices/) before producing a flashable image. The source tree supplies the build toolchain, including Java. Initialize the build shell with:
+
+```sh
+source build/envsetup.sh
 ```
-Please see the [LineageOS Wiki](https://wiki.lineageos.org/) for building instructions, by device.
 
+## Development and upstream updates
 
-Submitting patches
-------------------
-Patches are always welcome! Please submit your patches via LineageOS Gerrit!
+The sync script configures an `upstream` remote for each ArkUI fork and sends pushes to ArkUI-Project over SSH. Create a working branch for the project being changed:
 
-Simply follow our guide on [how to submit patches](https://wiki.lineageos.org/submitting-patch-howto.html).
+```sh
+cd source
+repo start arkui-23.2 frameworks/base
+cd frameworks/base
+git fetch upstream lineage-23.2
+git push arkui HEAD:refs/heads/arkui-23.2
+```
 
-To view the status of your and others' patches, visit [LineageOS Gerrit Code Review](https://review.lineageos.org/).
-
-
-Buildbot
---------
-
-All supported devices are built weekly and periodically as changes are committed to ensure the source trees remain buildable.
-
-You can view the current build statuses at [LineageOS Buildkite](https://buildkite.com/lineageos).
-
-Builds produced weekly by the buildbot can be downloaded from [LineageOS downloads](https://download.lineageos.org/).
+Manifest development happens in `manifest/`, whose `origin` points to ArkUI-Project and `upstream` points to LineageOS. Review and integrate upstream changes before updating the manifest branch, then synchronize the workspace. Preserve upstream license notices in all source repositories.

@@ -2,8 +2,12 @@
 <manifest>
 
   <remote  name="github"
-           fetch=".."
+           fetch="https://github.com"
            review="review.lineageos.org" />
+
+  <remote  name="arkui"
+           fetch="https://github.com"
+           pushurl="ssh://git@github.com" />
 
   <remote  name="private"
            fetch="ssh://git@github.com" />
@@ -21,7 +25,7 @@
   <contactinfo bugurl="go/repo-bug" />
 
   <!-- AOSP Projects -->
-  <project path="build/make" name="LineageOS/android_build" groups="pdk,sysui-studio" >
+  <project path="build/make" name="ArkUI-Project/android_build" remote="arkui" groups="pdk,sysui-studio" >
     <linkfile src="CleanSpec.mk" dest="build/CleanSpec.mk" />
     <linkfile src="buildspec.mk.default" dest="build/buildspec.mk.default" />
     <linkfile src="core" dest="build/core" />
@@ -32,7 +36,7 @@
   <project path="build/blueprint" name="platform/build/blueprint" groups="pdk,tradefed" remote="aosp" />
   <project path="build/pesto" name="platform/build/pesto" groups="pdk" remote="aosp" />
   <project path="build/release" name="LineageOS/android_build_release" groups="pdk,tradefed,sysui-studio" />
-  <project path="build/soong" name="LineageOS/android_build_soong" groups="pdk,tradefed,sysui-studio" />
+  <project path="build/soong" name="ArkUI-Project/android_build_soong" remote="arkui" groups="pdk,tradefed,sysui-studio" />
   <project path="art" name="LineageOS/android_art" groups="pdk" />
   <project path="bionic" name="LineageOS/android_bionic" groups="pdk" />
   <project path="bootable/deprecated-ota" name="LineageOS/android_bootable_deprecated-ota" groups="pdk-cw" />
@@ -595,7 +599,7 @@
   <project path="external/zucchini" name="platform/external/zucchini" groups="pdk" remote="aosp" />
   <project path="external/zxing" name="platform/external/zxing" groups="pdk" remote="aosp" />
   <project path="frameworks/av" name="LineageOS/android_frameworks_av" groups="pdk,sysui-studio" />
-  <project path="frameworks/base" name="LineageOS/android_frameworks_base" groups="pdk-cw-fs,pdk-fs,sysui-studio" />
+  <project path="frameworks/base" name="ArkUI-Project/android_frameworks_base" remote="arkui" groups="pdk-cw-fs,pdk-fs,sysui-studio" />
   <project path="frameworks/compile/libbcc" name="platform/frameworks/compile/libbcc" groups="pdk" remote="aosp" />
   <project path="frameworks/compile/mclinker" name="platform/frameworks/compile/mclinker" groups="pdk" remote="aosp" />
   <project path="frameworks/compile/slang" name="platform/frameworks/compile/slang" groups="pdk" remote="aosp" />
@@ -719,7 +723,7 @@
   <project path="packages/apps/HTMLViewer" name="platform/packages/apps/HTMLViewer" groups="pdk-fs" remote="aosp" />
   <project path="packages/apps/ImsServiceEntitlement" name="platform/packages/apps/ImsServiceEntitlement" groups="pdk-fs" remote="aosp" />
   <project path="packages/apps/KeyChain" name="LineageOS/android_packages_apps_KeyChain" groups="pdk-fs" />
-  <project path="packages/apps/Launcher3" name="LineageOS/android_packages_apps_Launcher3" groups="pdk-fs,sysui-studio,pdk-cw-tvc" />
+  <project path="packages/apps/Launcher3" name="ArkUI-Project/android_packages_apps_Launcher3" remote="arkui" groups="pdk-fs,sysui-studio,pdk-cw-tvc" />
   <project path="packages/apps/ManagedProvisioning" name="LineageOS/android_packages_apps_ManagedProvisioning" groups="pdk-fs" />
   <project path="packages/apps/Messaging" name="LineageOS/android_packages_apps_Messaging" groups="pdk-fs" />
   <project path="packages/apps/Multiuser" name="platform/packages/apps/Multiuser" groups="pdk-fs" remote="aosp" />
@@ -734,7 +738,7 @@
   <project path="packages/apps/SafetyRegulatoryInfo" name="platform/packages/apps/SafetyRegulatoryInfo" groups="pdk-fs" remote="aosp" />
   <project path="packages/apps/SampleLocationAttribution" name="platform/packages/apps/SampleLocationAttribution" groups="pdk-fs" remote="aosp" />
   <project path="packages/apps/SecureElement" name="platform/packages/apps/SecureElement" groups="apps_se,pdk-fs,pdk-cw-fs" remote="aosp" />
-  <project path="packages/apps/Settings" name="LineageOS/android_packages_apps_Settings" groups="pdk-fs,pdk-cw-tvc,sysui-studio" />
+  <project path="packages/apps/Settings" name="ArkUI-Project/android_packages_apps_Settings" remote="arkui" groups="pdk-fs,pdk-cw-tvc,sysui-studio" />
   <project path="packages/apps/SettingsIntelligence" name="LineageOS/android_packages_apps_SettingsIntelligence" groups="pdk-fs" />
   <project path="packages/apps/Stk" name="LineageOS/android_packages_apps_Stk" groups="apps_stk,pdk-fs" />
   <project path="packages/apps/StorageManager" name="platform/packages/apps/StorageManager" groups="pdk-fs" remote="aosp" />
