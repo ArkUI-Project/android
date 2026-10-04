@@ -1,0 +1,11 @@
+diff --git a/development/windows/arkui.py b/development/windows/arkui.py
+--- a/development/windows/arkui.py
++++ b/development/windows/arkui.py
+@@ -539,6 +539,7 @@ def create_avd(cfg, image, proof):
+                "hw.mainKeys": "no", "hw.dPad": "no",
+                "hw.lcd.width": "1080", "hw.lcd.height": "2400", "hw.lcd.density": "420",
+                "hw.gpu.enabled": "yes", "hw.gpu.mode": cfg["gpu"],
++               "hw.gltransport": "asg",
+                "hw.camera.back": "none", "hw.camera.front": "none",
+                "disk.dataPartition.size": "8G", "image.sysdir.1": image.as_posix() + "/",
+                "tag.id": "lineage", "tag.display": "ArkUI Local ROM",
